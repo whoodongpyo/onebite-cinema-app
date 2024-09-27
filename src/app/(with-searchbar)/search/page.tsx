@@ -5,6 +5,7 @@ import styles from './page.module.css';
 
 import { MovieData } from '@/types';
 import delay from '@/util/delay';
+import MovieListSkeleton from '@/components/skeleton/movie-list-skeleton';
 
 async function SearchResult({ q }: { q: string }) {
   await delay(1000);
@@ -21,13 +22,7 @@ async function SearchResult({ q }: { q: string }) {
 
   const searchedMovies: MovieData[] = await response.json();
 
-  return (
-    <div className={styles.search_container}>
-      {searchedMovies.map((movie) => (
-        <MovieItem key={movie.id} {...movie} />
-      ))}
-    </div>
-  );
+  return searchedMovies.map((movie) => <MovieItem key={movie.id} {...movie} />);
 }
 export default function Page({
   searchParams,
@@ -35,8 +30,13 @@ export default function Page({
   searchParams: { q?: string };
 }) {
   return (
-    <Suspense key={searchParams.q || ''} fallback={<div>Loading...</div>}>
-      <SearchResult q={searchParams.q || ''} />
-    </Suspense>
+    <div className={styles.search_container}>
+      <Suspense
+        key={searchParams.q || ''}
+        fallback={<MovieListSkeleton count={12} />}
+      >
+        <SearchResult q={searchParams.q || ''} />
+      </Suspense>
+    </div>
   );
 }

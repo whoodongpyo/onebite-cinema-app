@@ -73,7 +73,7 @@ export default function Home() {
       <section>
         <h3>등록된 모든 영화</h3>
         <div className={styles.all_container}>
-          <Suspense fallback={<MovieListSkeleton count={15} />}>
+          <Suspense fallback={<MovieListSkeleton count={20} />}>
             <AllMovies />
           </Suspense>
         </div>
