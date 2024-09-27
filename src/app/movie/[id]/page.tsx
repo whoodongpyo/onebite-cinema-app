@@ -7,8 +7,10 @@ export default async function Page({
 }: {
   params: { id: string | string[] };
 }) {
+  // 현재 영화 정보는 변경될 일이 없으므로, force-cache 로 설정한다.
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/${params.id}`,
+    { cache: 'force-cache' },
   );
 
   if (!response.ok) {

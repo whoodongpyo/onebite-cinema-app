@@ -11,6 +11,7 @@ export default async function Page({
 }) {
   const { q } = searchParams;
 
+  // 현재는 영화 데이터가 변경될 일이 없으므로, force-cache 를 적용한다.
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/search?q=${q}`,
   );

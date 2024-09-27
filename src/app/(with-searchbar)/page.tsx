@@ -5,8 +5,10 @@ import styles from './page.module.css';
 import { MovieData } from '@/types';
 
 async function AllMovies() {
+  // 전체 영화 목록은 현재 데이터가 변경될 일이 없으므로 force-cache 를 적용한다.
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie`,
+    { cache: 'force-cache' },
   );
 
   if (!response.ok) {
@@ -25,8 +27,11 @@ async function AllMovies() {
 }
 
 async function RecoMovies() {
+  // 추천 목록은 계속 무작위로 보여줘야 하기 때문에
+  // 특정 시간을 주기로 업데이트하도록 revalidate 로 적용한다.
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/random`,
+    { next: { revalidate: 3 } },
   );
 
   if (!response.ok) {
