@@ -3,12 +3,15 @@ import MovieItem from '@/components/movie-item';
 import styles from './page.module.css';
 
 import { MovieData } from '@/types';
+import delay from '@/util/delay';
 
 export default async function Page({
   searchParams,
 }: {
   searchParams: { q?: string };
 }) {
+  await delay(1500);
+
   const { q } = searchParams;
 
   // 현재는 영화 데이터가 변경될 일이 없으므로, force-cache 를 적용한다.
