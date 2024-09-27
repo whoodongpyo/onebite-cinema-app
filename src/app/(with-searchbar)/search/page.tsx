@@ -1,3 +1,4 @@
+import { Suspense } from 'react';
 import MovieItem from '@/components/movie-item';
 
 import styles from './page.module.css';
@@ -5,14 +6,8 @@ import styles from './page.module.css';
 import { MovieData } from '@/types';
 import delay from '@/util/delay';
 
-export default async function Page({
-  searchParams,
-}: {
-  searchParams: { q?: string };
-}) {
-  await delay(1500);
-
-  const { q } = searchParams;
+async function SearchResult({ q }: { q: string }) {
+  await delay(1000);
 
   // 현재는 영화 데이터가 변경될 일이 없으므로, force-cache 를 적용한다.
   const response = await fetch(
@@ -32,5 +27,16 @@ export default async function Page({
         <MovieItem key={movie.id} {...movie} />
       ))}
     </div>
+  );
+}
+export default function Page({
+  searchParams,
+}: {
+  searchParams: { q?: string };
+}) {
+  return (
+    <Suspense key={searchParams.q || ''} fallback={<div>Loading...</div>}>
+      <SearchResult q={searchParams.q || ''} />
+    </Suspense>
   );
 }
