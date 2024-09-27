@@ -1,25 +1,26 @@
 import { MovieData } from '@/types';
 
 import styles from './page.module.css';
-import movies from '@/mock/dummy.json';
 
-export default function Page({
+export default async function Page({
   params,
 }: {
   params: { id: string | string[] };
 }) {
-  const { id } = params;
-
-  const foundMovie: MovieData | undefined = movies.find(
-    (movie) => movie.id === Number(id),
+  // 현재 영화 정보는 변경될 일이 없으므로, force-cache 로 설정한다.
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/${params.id}`,
+    { cache: 'force-cache' },
   );
 
-  if (!foundMovie) {
-    return '존재하지 않는 영화 정보입니다. 다시 시도해주세요.';
+  if (!response.ok) {
+    return <div>영화 정보를 불러오는 중 문제가 발생했습니다...</div>;
   }
 
+  const foundMovie: MovieData = await response.json();
+
   const {
-    // id,
+    id,
     title,
     releaseDate,
     company,

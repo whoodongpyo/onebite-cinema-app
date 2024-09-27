@@ -1,24 +1,30 @@
 import MovieItem from '@/components/movie-item';
 
 import styles from './page.module.css';
-import movies from '@/mock/dummy.json';
 
-export default function Page({
+import { MovieData } from '@/types';
+
+export default async function Page({
   searchParams,
 }: {
   searchParams: { q?: string };
 }) {
   const { q } = searchParams;
 
-  const filteredMovies = q
-    ? movies.filter((movie) =>
-        movie.title.toLowerCase().includes(q.toString().toLowerCase()),
-      )
-    : movies;
+  // 현재는 영화 데이터가 변경될 일이 없으므로, force-cache 를 적용한다.
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/search?q=${q}`,
+  );
+
+  if (!response.ok) {
+    return <div>검색 중 문제가 발생했습니다...</div>;
+  }
+
+  const searchedMovies: MovieData[] = await response.json();
 
   return (
     <div className={styles.search_container}>
-      {filteredMovies.map((movie) => (
+      {searchedMovies.map((movie) => (
         <MovieItem key={movie.id} {...movie} />
       ))}
     </div>
