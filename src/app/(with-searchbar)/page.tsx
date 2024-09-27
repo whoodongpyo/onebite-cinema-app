@@ -5,6 +5,7 @@ import styles from './page.module.css';
 import { MovieData } from '@/types';
 import delay from '@/util/delay';
 import { Suspense } from 'react';
+import MovieListSkeleton from '@/components/skeleton/movie-list-skeleton';
 
 // 특정 페이지의 유형을 강제로 Static, Dynamic 페이지로 설정
 // 1. auto : 기본값, 아무것도 강제하지 않음
@@ -30,13 +31,9 @@ async function AllMovies() {
 
   const allMovies: MovieData[] = await response.json();
 
-  return (
-    <div className={styles.all_container}>
-      {allMovies.map((movie) => (
-        <MovieItem key={`all-${movie.id}`} {...movie} />
-      ))}
-    </div>
-  );
+  return allMovies.map((movie) => (
+    <MovieItem key={`all-${movie.id}`} {...movie} />
+  ));
 }
 
 async function RecoMovies() {
@@ -55,13 +52,9 @@ async function RecoMovies() {
 
   const recoMovies: MovieData[] = await response.json();
 
-  return (
-    <div className={styles.reco_container}>
-      {recoMovies.map((movie) => (
-        <MovieItem key={`reco-${movie.id}`} {...movie} />
-      ))}
-    </div>
-  );
+  return recoMovies.map((movie) => (
+    <MovieItem key={`reco-${movie.id}`} {...movie} />
+  ));
 }
 
 export const dynamic = 'force-dynamic';
@@ -71,15 +64,19 @@ export default function Home() {
     <div className={styles.container}>
       <section>
         <h3>지금 가장 추천하는 영화</h3>
-        <Suspense fallback={<div>추천 영화 목록을 불러오는 중...</div>}>
-          <RecoMovies />
-        </Suspense>
+        <div className={styles.reco_container}>
+          <Suspense fallback={<MovieListSkeleton count={3} />}>
+            <RecoMovies />
+          </Suspense>
+        </div>
       </section>
       <section>
         <h3>등록된 모든 영화</h3>
-        <Suspense fallback={<div>모든 영화 목록을 불러오는 중...</div>}>
-          <AllMovies />
-        </Suspense>
+        <div className={styles.all_container}>
+          <Suspense fallback={<MovieListSkeleton count={15} />}>
+            <AllMovies />
+          </Suspense>
+        </div>
       </section>
     </div>
   );
