@@ -1,8 +1,9 @@
-import { MovieData } from '@/types';
+import { MovieData, ReviewData } from '@/types';
 
 import styles from './page.module.css';
 import { notFound } from 'next/navigation';
 import { createReviewAction } from '@/actions/create-review.action';
+import ReviewItem from '@/components/review-item';
 
 // 정적으로 생성한 파라미터 외에는 모두 404로 보내고 싶다면
 export const dynamicParams = false;
@@ -89,11 +90,32 @@ function ReviewEditor({ movieId }: { movieId: string }) {
   );
 }
 
+async function ReviewList({ movieId }: { movieId: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/movie/${movieId}`,
+  );
+
+  if (!response.ok) {
+    throw new Error(`Review fetch failed : ${response.statusText}`);
+  }
+
+  const reviews: ReviewData[] = await response.json();
+
+  return (
+    <section>
+      {reviews.map((review) => (
+        <ReviewItem key={`review-item-${review.id}`} {...review} />
+      ))}
+    </section>
+  );
+}
+
 export default function Page({ params }: { params: { id: string } }) {
   return (
     <div className={styles.container}>
       <MovieDetail movieId={params.id} />
       <ReviewEditor movieId={params.id} />
+      <ReviewList movieId={params.id} />
     </div>
   );
 }
