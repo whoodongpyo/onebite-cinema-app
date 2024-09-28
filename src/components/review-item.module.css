@@ -1,0 +1,51 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  padding: 20px 0;
+  border-bottom: 1px solid #F0F4F6;
+}
+
+.author_container {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.author {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.date {
+  font-size: 16px;
+  color: #696969;
+}
+
+.content {
+  font-size: 16px;
+  padding: 10px 0;
+}
+
+.bottom_container {
+  display: flex;
+  justify-content: flex-end;
+  padding-right: 5px;
+}
+
+.delete_btn button {
+  padding: 10px;
+  font-size: 14px;
+  color: white;
+  background-color: #25262B;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  box-shadow: none;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.delete_btn button:hover {
+  background-color: #E50914;
+}
