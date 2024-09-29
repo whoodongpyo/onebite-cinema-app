@@ -1,6 +1,6 @@
 'use server'; // 서버 액션 설정
 
-import { revalidatePath } from 'next/cache';
+import { revalidatePath, revalidateTag } from 'next/cache';
 
 export async function createReviewAction(formData: FormData) {
   const movieId = formData.get('movieId')?.toString();
@@ -20,10 +20,20 @@ export async function createReviewAction(formData: FormData) {
 
     console.log(response.status);
 
-    revalidatePath(`/movie/${movieId}`);
-    // 1) 서버 컴포넌트 내부에서만 호출할 수 있다.
-    // 2) 해당 페이지에 포함된 캐시들을 모두 PURGE 한다. -> force-cache 로 설정되어 있어도 캐시들이 적용되지 않는다.
-    // 3) 풀 라우트 캐시도 PURGE 하고, 새로운 페이지를 풀 라우트 캐시로 저장하지 않는다. (같은 페이지에 다시 접속해야 한다.)
+    // 1. 특정 주소에 해당하는 페이지만 재검증
+    // revalidatePath(`/movie/${movieId}`);
+
+    // 2. 특정 경로의 모든 동적 페이지들을 재검증
+    // revalidatePath('/movie/[id]', 'page');
+
+    // 3. 특정 레이아웃을 갖는 모든 페이지들을 재검증
+    // revalidatePath('/(with-searchbar)', 'layout');
+
+    // 4. 모든 데이터 재검증
+    // revalidatePath('/', 'layout');
+
+    // 5. 태그를 기준으로 데이터 캐시 재검증
+    revalidateTag(`review-${movieId}`);
   } catch (error) {
     console.error(error);
     return;
