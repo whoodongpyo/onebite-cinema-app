@@ -1,7 +1,10 @@
-import { MovieData } from '@/types';
+import { MovieData, ReviewData } from '@/types';
 
 import styles from './page.module.css';
 import { notFound } from 'next/navigation';
+
+import ReviewItem from '@/components/review-item';
+import ReviewEditor from '@/components/review-editor';
 
 // 정적으로 생성한 파라미터 외에는 모두 404로 보내고 싶다면
 export const dynamicParams = false;
@@ -20,14 +23,11 @@ export async function generateStaticParams() {
   const movies: MovieData[] = await response.json();
   return movies.map((movie) => ({ id: movie.id.toString() }));
 }
-export default async function Page({
-  params,
-}: {
-  params: { id: string | string[] };
-}) {
+
+async function MovieDetail({ movieId }: { movieId: string }) {
   // 현재 영화 정보는 변경될 일이 없으므로, force-cache 로 설정한다.
   const response = await fetch(
-    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/${params.id}`,
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/${movieId}`,
     { cache: 'force-cache' },
   );
 
@@ -54,7 +54,7 @@ export default async function Page({
   } = foundMovie;
 
   return (
-    <div className={styles.container}>
+    <section>
       <div
         className={styles.cover_img_container}
         style={{ backgroundImage: `url('${posterImgUrl}')` }}
@@ -74,6 +74,36 @@ export default async function Page({
           <div className={styles.description}>{description}</div>
         </div>
       </div>
+    </section>
+  );
+}
+
+async function ReviewList({ movieId }: { movieId: string }) {
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/movie/${movieId}`,
+  );
+
+  if (!response.ok) {
+    throw new Error(`Review fetch failed : ${response.statusText}`);
+  }
+
+  const reviews: ReviewData[] = await response.json();
+
+  return (
+    <section>
+      {reviews.map((review) => (
+        <ReviewItem key={`review-item-${review.id}`} {...review} />
+      ))}
+    </section>
+  );
+}
+
+export default function Page({ params }: { params: { id: string } }) {
+  return (
+    <div className={styles.container}>
+      <MovieDetail movieId={params.id} />
+      <ReviewEditor movieId={params.id} />
+      <ReviewList movieId={params.id} />
     </div>
   );
 }
