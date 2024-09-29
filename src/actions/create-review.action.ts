@@ -11,8 +11,6 @@ export async function createReviewAction(
   const content = formData.get('content')?.toString();
   const author = formData.get('author')?.toString();
 
-  await delay(2000);
-
   if (!movieId || !content || !author) {
     return {
       status: false,
@@ -22,7 +20,7 @@ export async function createReviewAction(
 
   try {
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review/1`,
+      `${process.env.NEXT_PUBLIC_API_SERVER_URL}/review`,
       {
         method: 'POST',
         body: JSON.stringify({ movieId, content, author }),
