@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidateTag } from 'next/cache';
+import delay from '@/util/delay';
 
 export async function deleteReviewAction(
   previousState: any,
@@ -8,6 +9,8 @@ export async function deleteReviewAction(
 ) {
   const reviewId = formData.get('reviewId')?.toString();
   const movieId = formData.get('movieId')?.toString();
+
+  await delay(3000);
 
   if (!reviewId) {
     return {

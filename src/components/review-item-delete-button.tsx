@@ -23,16 +23,20 @@ export default function ReviewItemDeleteButton({
     }
   }, [state]);
 
+  const handleDeleteReview = () => {
+    if (confirm('해당 리뷰를 정말 삭제하시겠습니까?')) {
+      formRef.current?.requestSubmit();
+    }
+  };
+
   return (
     <form ref={formRef} action={formAction}>
       <input type="hidden" name="reviewId" value={reviewId} />
       <input type="hidden" name="movieIed" value={movieId} />
       {isPending ? (
-        <button>...</button>
+        <button disabled={isPending}>...삭제중...</button>
       ) : (
-        <button onClick={() => formRef.current?.requestSubmit()}>
-          삭제하기
-        </button>
+        <button onClick={handleDeleteReview}>삭제하기</button>
       )}
     </form>
   );
