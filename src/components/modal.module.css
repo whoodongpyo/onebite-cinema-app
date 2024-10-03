@@ -1,0 +1,14 @@
+.modal {
+  width: 80%;
+  max-width: 700px;
+  margin-top: 20px;
+  border-radius: 5px;
+  border: 2px solid slategray;
+  background-color: #1F2020;
+  color: white;
+}
+
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.7);
+}
+
