@@ -5,6 +5,7 @@ import { notFound } from 'next/navigation';
 
 import ReviewItem from '@/components/review-item';
 import ReviewEditor from '@/components/review-editor';
+import Image from 'next/image';
 
 // 정적으로 생성한 파라미터 외에는 모두 404로 보내고 싶다면
 export const dynamicParams = false;
@@ -59,7 +60,14 @@ async function MovieDetail({ movieId }: { movieId: string }) {
         className={styles.cover_img_container}
         style={{ backgroundImage: `url('${posterImgUrl}')` }}
       >
-        <img src={posterImgUrl} alt={title} />
+        <Image
+          className={styles.cover_img}
+          src={posterImgUrl}
+          alt={title}
+          width={233}
+          height={350}
+          priority={true}
+        />
       </div>
       <div className={styles.info_container}>
         <div>
