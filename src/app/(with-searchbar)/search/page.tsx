@@ -6,6 +6,7 @@ import styles from './page.module.css';
 import { MovieData } from '@/types';
 import delay from '@/util/delay';
 import MovieListSkeleton from '@/components/skeleton/movie-list-skeleton';
+import { Metadata } from 'next';
 
 async function SearchResult({ q }: { q: string }) {
   await delay(1000);
@@ -23,6 +24,22 @@ async function SearchResult({ q }: { q: string }) {
   const searchedMovies: MovieData[] = await response.json();
 
   return searchedMovies.map((movie) => <MovieItem key={movie.id} {...movie} />);
+}
+
+type Props = {
+  searchParams: { q?: string };
+};
+
+export function generateMetadata({ searchParams }: Props): Metadata {
+  return {
+    title: `검색 결과 : ${searchParams.q} | 한입 씨네마`,
+    description: `${searchParams.q}의 검색 결과입니다.`,
+    openGraph: {
+      title: `검색 결과 : ${searchParams.q} | 한입 씨네마`,
+      description: `${searchParams.q}의 검색 결과입니다.`,
+      images: ['/thumbnail.png'],
+    },
+  };
 }
 export default function Page({
   searchParams,
