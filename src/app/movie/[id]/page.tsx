@@ -5,12 +5,14 @@ import { notFound } from 'next/navigation';
 
 import ReviewItem from '@/components/review-item';
 import ReviewEditor from '@/components/review-editor';
+import Image from 'next/image';
+import { Metadata } from 'next';
 
 // 정적으로 생성한 파라미터 외에는 모두 404로 보내고 싶다면
 export const dynamicParams = false;
 
 // 약속된 이름의 함수 ㅣ getStaticPaths 와 유사
-export async function generateStaticParams() {
+export async function generateStaticParams(): Promise<{ id: string }[]> {
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie`,
   );
@@ -59,7 +61,14 @@ async function MovieDetail({ movieId }: { movieId: string }) {
         className={styles.cover_img_container}
         style={{ backgroundImage: `url('${posterImgUrl}')` }}
       >
-        <img src={posterImgUrl} alt={title} />
+        <Image
+          className={styles.cover_img}
+          src={posterImgUrl}
+          alt={title}
+          width={233}
+          height={350}
+          priority={true}
+        />
       </div>
       <div className={styles.info_container}>
         <div>
@@ -97,6 +106,36 @@ async function ReviewList({ movieId }: { movieId: string }) {
       ))}
     </section>
   );
+}
+
+type Props = {
+  params: { id: string };
+};
+
+export async function generateMetadata({
+  params,
+}: Props): Promise<Metadata | null> {
+  // 리퀘스트 메모이제이션 덕분에 아래 API 는 한 번만 호출된다.
+  const response = await fetch(
+    `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/${params.id}`,
+    { cache: 'force-cache' },
+  );
+
+  if (!response.ok) {
+    throw new Error(response.statusText);
+  }
+
+  const movie: MovieData = await response.json();
+
+  return {
+    title: `${movie.title} | 한입 씨네마`,
+    description: `${movie.description}`,
+    openGraph: {
+      title: `${movie.title} | 한입 씨네마`,
+      description: `${movie.description}`,
+      images: [movie.posterImgUrl],
+    },
+  };
 }
 
 export default function Page({ params }: { params: { id: string } }) {

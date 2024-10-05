@@ -20,6 +20,7 @@
   background-size: cover;
 
   position: relative;
+  height: 350px;
 }
 
 .cover_img_container::before {
@@ -32,10 +33,12 @@
   background-color: rgba(0, 0, 0, 0.7);
 }
 
-.cover_img_container > img {
+.cover_img {
+  /* cover_img_container 가 줄어들면 비율에 맞게 줄어들도록 설정 */
   z-index: 1;
-  max-height: 350px;
-  height: 100%;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
 }
 
 .container h2 {

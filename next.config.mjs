@@ -4,6 +4,11 @@ const nextConfig = {
     fetches: {
       fullUrl: true,
     }
+  },
+  images: {
+    domains: [
+      'media.themoviedb.org'
+    ]
   }
 };
 

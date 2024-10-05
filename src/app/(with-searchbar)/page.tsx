@@ -6,6 +6,7 @@ import { MovieData } from '@/types';
 import delay from '@/util/delay';
 import { Suspense } from 'react';
 import MovieListSkeleton from '@/components/skeleton/movie-list-skeleton';
+import { Metadata } from 'next';
 
 // 특정 페이지의 유형을 강제로 Static, Dynamic 페이지로 설정
 // 1. auto : 기본값, 아무것도 강제하지 않음
@@ -58,6 +59,16 @@ async function RecoMovies() {
 }
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  title: '한입 씨네마',
+  description: '한입 씨네마에 등록된 영화를 만나보세요.',
+  openGraph: {
+    title: '한입 씨네마',
+    description: '한입 씨네마에 등록된 영화를 만나보세요.',
+    images: ['/thumbnail.png'],
+  },
+};
 
 export default function Home() {
   return (
