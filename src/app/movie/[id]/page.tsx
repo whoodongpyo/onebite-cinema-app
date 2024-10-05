@@ -1,12 +1,13 @@
-import { MovieData, ReviewData } from '@/types';
-
 import styles from './page.module.css';
+
+import Image from 'next/image';
+import { Metadata } from 'next';
 import { notFound } from 'next/navigation';
+
+import { MovieData, ReviewData } from '@/types';
 
 import ReviewItem from '@/components/review-item';
 import ReviewEditor from '@/components/review-editor';
-import Image from 'next/image';
-import { Metadata } from 'next';
 
 // 정적으로 생성한 파라미터 외에는 모두 404로 보내고 싶다면
 export const dynamicParams = false;

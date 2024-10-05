@@ -1,7 +1,6 @@
 'use server'; // 서버 액션 설정
 
-import { revalidatePath, revalidateTag } from 'next/cache';
-import delay from '@/util/delay';
+import { revalidateTag } from 'next/cache';
 
 export async function createReviewAction(
   previousState: any,

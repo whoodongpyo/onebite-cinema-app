@@ -8,7 +8,7 @@ const nextConfig = {
   images: {
     domains: [
       'media.themoviedb.org'
-    ]
+    ],
   }
 };
 

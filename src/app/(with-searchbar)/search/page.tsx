@@ -1,16 +1,14 @@
-import { Suspense } from 'react';
-import MovieItem from '@/components/movie-item';
-
 import styles from './page.module.css';
 
-import { MovieData } from '@/types';
-import delay from '@/util/delay';
-import MovieListSkeleton from '@/components/skeleton/movie-list-skeleton';
+import { Suspense } from 'react';
 import { Metadata } from 'next';
 
-async function SearchResult({ q }: { q: string }) {
-  await delay(1000);
+import MovieItem from '@/components/movie-item';
+import MovieListSkeleton from '@/components/skeleton/movie-list-skeleton';
 
+import { MovieData } from '@/types';
+
+async function SearchResult({ q }: { q: string }) {
   // 현재는 영화 데이터가 변경될 일이 없으므로, force-cache 를 적용한다.
   const response = await fetch(
     `${process.env.NEXT_PUBLIC_API_SERVER_URL}/movie/search?q=${q}`,
